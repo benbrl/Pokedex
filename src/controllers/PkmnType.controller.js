@@ -1,4 +1,3 @@
-
 const PokemonTypeService = require("../services/PkmnType.service");
 
 exports.getPokemonType = async (req, res) => {
