@@ -1,0 +1,22 @@
+.background-blue {
+  background-color: #76BDFB;
+
+}
+
+@keyframes bg-scrolling {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 100px 100px;
+  }
+}
+
+.bg-pokeball {
+  background-image: url("./pokeball.png");
+  /* Remplace par le bon chemin */
+  background-size: 300px 300px;
+  background-repeat: repeat;
+  animation: bg-scrolling 10s linear infinite;
+}

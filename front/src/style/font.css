@@ -1,0 +1,13 @@
+h1 ,h2{
+    font-family: "Figtree", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: xx-large;
+}
+p,input{
+    font-family: "Figtree", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}

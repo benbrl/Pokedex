@@ -1,0 +1,525 @@
+{
+	"info": {
+		"_postman_id": "c163dca5-f4a6-4e6d-bb61-829faa07532f",
+		"name": "Pokédex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42119101"
+	},
+	"item": [
+		{
+			"name": "Get Type Pokemon",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn/types",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn",
+						"types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Pokemon",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "pikachu",
+							"type": "text"
+						},
+						{
+							"key": "types[0]type",
+							"value": "FEU",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "je suis pikachu",
+							"type": "text"
+						},
+						{
+							"key": "imgUrl",
+							"value": "https://i.ebayimg.com/images/g/B~gAAOSwhNthhdjn/s-l400.jpg",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pokemon",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn/pikachu",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn",
+						"pikachu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Pokemon",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Regions",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "region",
+							"value": "Blibli",
+							"type": "text"
+						},
+						{
+							"key": "regionName",
+							"value": "13",
+							"type": "text"
+						},
+						{
+							"key": "pokemonId",
+							"value": "67af1720f9d11030a47d0275",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn/region",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn",
+						"region"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update pokemon",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "PikaPika",
+							"type": "text"
+						},
+						{
+							"key": "types[0]type",
+							"value": "FEU",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "blabla",
+							"type": "text"
+						},
+						{
+							"key": "imgUrl",
+							"value": "https://image.com",
+							"type": "text"
+						},
+						{
+							"key": "regions[regionName]",
+							"value": "Blibligzegzegz",
+							"type": "text"
+						},
+						{
+							"key": "regions[regionPokedexNumber]",
+							"value": "15",
+							"type": "text"
+						},
+						{
+							"key": "regionName",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn/67af1ad788d144abccb20297",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn",
+						"67af1ad788d144abccb20297"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Region",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "regionName",
+							"value": "Blibligzegzegz",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn/region/67af1ad788d144abccb20297",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn",
+						"region",
+						"67af1ad788d144abccb20297"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Pokemon",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/pkmn/search?page=1&size=20&typeOne=FEU&partialName=pika",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"pkmn",
+						"search"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "20"
+						},
+						{
+							"key": "typeOne",
+							"value": "FEU"
+						},
+						{
+							"key": "partialName",
+							"value": "pika"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Trainer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "trainerName",
+							"value": "Sacha",
+							"type": "text"
+						},
+						{
+							"key": "imgUrl",
+							"value": "https://image.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/trainer/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"trainer",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Trainer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Trainer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/trainer/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"trainer",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Trainer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trainer mark",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "pokemonId",
+							"value": "67af1ad788d144abccb20297",
+							"type": "text"
+						},
+						{
+							"key": "isCaptured",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/trainer/mark",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"trainer",
+						"mark"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

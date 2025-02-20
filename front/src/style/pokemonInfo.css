@@ -1,0 +1,14 @@
+.pokeball-position {
+    position: relative;
+    top: 10%;
+    left: 45%;
+    width: 50vh;
+}
+
+.img-position {
+
+    position: relative;
+    top: -40%;
+    left: 20%;
+    width: 50vh;
+}
