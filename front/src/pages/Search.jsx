@@ -34,6 +34,9 @@ const PokemonSearch = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [seenPokemon, setSeenPokemon] = useState({});
   const [capturedPokemon, setCapturedPokemon] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [trainerFormVisible, setTrainerFormVisible] = useState(false);
+  const [trainer, setTrainer] = useState(null);
 
   const handleSearch = async (page = 1) => {
     try {
@@ -52,6 +55,83 @@ const PokemonSearch = () => {
   };
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("jwt");
+        if (!token) throw new Error("Token introuvable, veuillez vous reconnecter.");
+
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            setTrainerFormVisible(true);
+          } else {
+            throw new Error(`Erreur: ${response.status}`);
+          }
+        } else {
+          const data = await response.json();
+          setTrainer(data);
+          setTrainerFormVisible(false);
+
+          // Mettre à jour les états des Pokémon vus et capturés
+          const seenSet = new Set(data.pkmnSeen.map((pkmn) => pkmn._id));
+          const capturedSet = new Set(data.pkmnCatch.map((pkmn) => pkmn._id));
+
+          setSeenPokemon((prevSeen) => ({
+            ...prevSeen,
+            ...Object.fromEntries(Array.from(seenSet, (id) => [id, true])),
+          }));
+
+          setCapturedPokemon((prevCaptured) => ({
+            ...prevCaptured,
+            ...Object.fromEntries(Array.from(capturedSet, (id) => [id, true])),
+          }));
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération du profil:", error);
+        setTrainerFormVisible(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const toggleCapture = async (pokemonId) => {
+    if (capturedPokemon[pokemonId]) return; // Empêche le toggle si déjà capturé
+
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) throw new Error("Token introuvable, veuillez vous reconnecter.");
+
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/capture/${pokemonId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error(`Erreur: ${response.status}`);
+
+      // Mettre à jour l'état local des Pokémon capturés
+      setCapturedPokemon((prevCaptured) => ({
+        ...prevCaptured,
+        [pokemonId]: true,
+      }));
+    } catch (error) {
+      console.error("Erreur lors de la capture du Pokémon:", error);
+    }
+  };
+
+  useEffect(() => {
     handleSearch(currentPage);
   }, [currentPage, itemsPerPage]);
 
@@ -64,13 +144,19 @@ const PokemonSearch = () => {
   const handleMarkSeen = async (pokemonId) => {
     if (seenPokemon[pokemonId]) return; // Si déjà vu, ne rien faire
 
-    setSeenPokemon({ ...seenPokemon, [pokemonId]: true });
+    setSeenPokemon((prevSeen) => ({
+      ...prevSeen,
+      [pokemonId]: true,
+    }));
     await updatePokemonStatus(pokemonId, true, capturedPokemon[pokemonId] || false);
   };
 
   const handleToggleCaptured = async (pokemonId) => {
     const isCaptured = !capturedPokemon[pokemonId];
-    setCapturedPokemon({ ...capturedPokemon, [pokemonId]: isCaptured });
+    setCapturedPokemon((prevCaptured) => ({
+      ...prevCaptured,
+      [pokemonId]: isCaptured,
+    }));
     await updatePokemonStatus(pokemonId, seenPokemon[pokemonId] || false, isCaptured);
   };
 
@@ -161,7 +247,8 @@ const PokemonSearch = () => {
                   </button>
                   <button
                     onClick={() => handleToggleCaptured(pokemon._id)}
-                    className="text-lg"
+                    disabled={capturedPokemon[pokemon._id]}
+                    className={`text-lg ${capturedPokemon[pokemon._id] ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {capturedPokemon[pokemon._id] ? '📕 Capturé' : '📘 Attraper'}
                   </button>
