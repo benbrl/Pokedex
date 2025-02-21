@@ -45,31 +45,33 @@ const PokemonInfo = () => {
       setMessage("Vous devez être connecté pour voir ou attraper un Pokémon.");
       return;
     }
-
-    const urlencoded = new URLSearchParams();
-    urlencoded.append("pokemonId", pokemonId);
-    urlencoded.append("isCaptured", isCaptured);
-
+  
+    const data = new URLSearchParams();
+    data.append("pokemonId", pokemonId);
+    data.append("isCaptured", isCaptured);
+  
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/mark`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
           "Authorization": `Bearer ${token}`,
         },
-        body: urlencoded,
+        body: data.toString(),
       });
-
+  
       if (response.ok) {
         setMessage(isCaptured ? "Pokémon attrapé ! 🎉" : "Pokémon vu ! 👀");
       } else {
-        setMessage("Erreur lors de la mise à jour du statut.");
+        const errorMessage = await response.text();
+        console.error("Erreur API:", errorMessage);
+        setMessage(`Erreur: ${errorMessage}`);
       }
     } catch (error) {
       console.error("Erreur lors de la requête :", error);
       setMessage("Problème de connexion au serveur.");
     }
-  };
+  };  
 
   const PkmnTypeColors = {
     "normal": "#A8A878",

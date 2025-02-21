@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../components/navbar';
+import Navbar from '../components/Navbar';
 import Search from './Search';
 
 
@@ -8,7 +8,6 @@ const Dashboard = () => {
     <div className="flex h-screen">
       <Navbar />
       <div className="ms-8 flex-1 p-4">
-
           <Search/>
       </div>
     </div>

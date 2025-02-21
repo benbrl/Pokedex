@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PokemonCard from '../components/PokemonCard';
 import '../style/font.css';
-import Navbar from '../components/navbar';
+import Navbar from '../components/Navbar';
 
 const Pokedex = () => {
   const [pkmnCatch, setPkmnCatch] = useState([]);

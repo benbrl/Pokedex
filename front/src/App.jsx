@@ -18,14 +18,14 @@ function App() {
 
         <Route path="/dashboard" element={
 
-        <Dashboard />
-}
+          <Dashboard />
+        }
         />
         <Route
           path="/pokedex"
           element={
             <ProtectedRoute>
-                  <Pokedex />
+              <Pokedex />
             </ProtectedRoute>
           }
         />
@@ -37,8 +37,6 @@ function App() {
 
         <Route path="/pokemon/:name" element={<PokemonInfo />} />
 
-     
-
         <Route path="/settings" element={
           <ProtectedRoute>
             <Settings />
@@ -46,7 +44,7 @@ function App() {
         />
         <Route path="*" element={
           <ProtectedRoute>
-            <Login />
+            <Dashboard />
           </ProtectedRoute>}
         />
       </Routes>
