@@ -28,7 +28,7 @@ const Settings = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setTrainerName(data.trainerName || "Trainer");
+        setTrainerName(data.trainerName || "Sacha");
         setImgUrl(data.imgUrl || "");
         setEmail(data.email || "");
       })
@@ -63,9 +63,6 @@ const Settings = () => {
       .then((response) => response.json())
       .then(() => setTrainerMessage("Mise à jour réussie !"))
       .catch((error) => console.error("Erreur lors de la mise à jour :", error));
-
- 
-
   };
 
   const handleDeleteTrainer = () => {
@@ -100,8 +97,9 @@ const Settings = () => {
       <div className="ms-16 min-h-screen flex flex-col items-start p-6 w-full">
         <h1 className="text-3xl font-bold mb-6">Paramètres</h1>
 
+        {/* Conteneur en flex row pour User & Trainer */}
         <div className="flex flex-col md:flex-row gap-6 w-full">
-
+          {/* Bloc User */}
           <div className="bg-gray-100 p-4 rounded-lg shadow-inner w-full md:w-1/2">
             <h2 className="text-2xl font-bold mb-4">User</h2>
             {message && <p className="text-green-500 mb-4">{message}</p>}
