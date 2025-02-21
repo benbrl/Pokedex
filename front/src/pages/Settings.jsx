@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./nav";
+import Navbar from "../components/navbar";
 import "../style/font.css";
 
 const Settings = () => {
@@ -20,7 +20,7 @@ const Settings = () => {
       return;
     }
 
-    fetch("http://localhost:3000/trainer/", {
+    fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ const Settings = () => {
     urlencoded.append("trainerName", trainerName);
     urlencoded.append("imgUrl", imgUrl);
 
-    fetch("http://localhost:3000/trainer/", {
+    fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -81,7 +81,7 @@ const Settings = () => {
       redirect: "follow",
     };
 
-    fetch("http://localhost:3000/trainer/", requestOptions)
+    fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/`, requestOptions)
       .then((response) => response.text())
       .then(() => {
         setTrainerMessage("Suppression réussie !");
@@ -97,9 +97,9 @@ const Settings = () => {
       <div className="ms-16 min-h-screen flex flex-col items-start p-6 w-full">
         <h1 className="text-3xl font-bold mb-6">Paramètres</h1>
 
-        {/* Conteneur en flex row pour User & Trainer */}
+      
         <div className="flex flex-col md:flex-row gap-6 w-full">
-          {/* Bloc User */}
+      
           <div className="bg-gray-100 p-4 rounded-lg shadow-inner w-full md:w-1/2">
             <h2 className="text-2xl font-bold mb-4">User</h2>
             {message && <p className="text-green-500 mb-4">{message}</p>}

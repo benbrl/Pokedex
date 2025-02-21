@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PokemonCard from '../components/PokemonCard';
 import '../style/font.css';
+import Navbar from '../components/navbar';
 
 const Pokedex = () => {
   const [pkmnCatch, setPkmnCatch] = useState([]);
@@ -31,6 +32,8 @@ const Pokedex = () => {
 
   return (
     <div>
+      <Navbar />
+      <div>
       <h1>Pokedex</h1>
       {pkmnCatch.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -56,6 +59,7 @@ const Pokedex = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 }

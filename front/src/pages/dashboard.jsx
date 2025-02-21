@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from './nav';
-import Pokedex from './pokedex';
+import Navbar from '../components/navbar';
+import Search from './Search';
 
 
 const Dashboard = () => {
@@ -8,10 +8,8 @@ const Dashboard = () => {
     <div className="flex h-screen">
       <Navbar />
       <div className="ms-8 flex-1 p-4">
-        <div className="container mx-auto">
-   
-            <Pokedex/>
-
+        <div className="">
+          <Search/>
         </div>
       </div>
     </div>

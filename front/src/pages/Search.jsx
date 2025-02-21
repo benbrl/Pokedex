@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PokemonCard from '../components/PokemonCard';
 import '../style/pokecard.css';
-import Navbar from './nav';
+import Navbar from '../components/navbar';
 import { Link } from 'react-router-dom';
 
 const PkmnTypeColors = {
@@ -102,7 +102,7 @@ const PokemonSearch = () => {
     urlencoded.append("isCaptured", isCaptured);
 
     try {
-      const response = await fetch("http://localhost:3000/trainer/mark", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/mark`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -120,8 +120,7 @@ const PokemonSearch = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <Navbar />
+
       <div className="ms-8 pokemon-search-container flex-1 p-4">
         <div className="search-form flex flex-col md:flex-row gap-4 mb-6 w-full max-w-lg mx-auto">
           <input
@@ -193,7 +192,7 @@ const PokemonSearch = () => {
           </button>
         </div>
       </div>
-    </div>
+  
   );
 };
 

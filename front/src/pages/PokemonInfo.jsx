@@ -51,7 +51,7 @@ const PokemonInfo = () => {
     urlencoded.append("isCaptured", isCaptured);
 
     try {
-      const response = await fetch("http://localhost:3000/trainer/mark", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/mark`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

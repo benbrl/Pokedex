@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import Dashboard from "./pages/dashboard";
+import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PokemonInfo from "./pages/PokemonInfo";
+import Pokedex from "./pages/pokedex";
 
 
 function App() {
@@ -16,16 +16,16 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/search" element={
+        <Route path="/dashboard" element={
           <ProtectedRoute>
-            <Search />
+        <Dashboard />
           </ProtectedRoute>}
         />
         <Route
           path="/pokedex"
           element={
             <ProtectedRoute>
-              <Dashboard />
+                  <Pokedex />
             </ProtectedRoute>
           }
         />
