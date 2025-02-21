@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PokemonCard from '../components/PokemonCard';
 import '../style/pokecard.css';
-import Navbar from '../components/navbar';
 import { Link } from 'react-router-dom';
 
 const PkmnTypeColors = {
@@ -45,10 +44,10 @@ const PokemonSearch = () => {
         setPokemonList(data.data);
         setTotalItems(data.totalItems || 0);
       } else {
-        console.error('Expected an array in data property but received:', data);
+        console.error("Ce n'est pas un tableau", data);
       }
     } catch (error) {
-      console.error('Error fetching Pokémon data:', error);
+      console.error('Erreur dans le fetch Pokémon:', error);
     }
   };
 
@@ -105,8 +104,8 @@ const PokemonSearch = () => {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/mark`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: urlencoded,
       });
@@ -119,16 +118,30 @@ const PokemonSearch = () => {
     }
   };
 
-  return (
+  const isLoggedIn = !!localStorage.getItem("jwt");
 
-      <div className="ms-8 pokemon-search-container flex-1 p-4">
-        <div className="search-form flex flex-col md:flex-row gap-4 mb-6 w-full max-w-lg mx-auto">
+  return (
+    <div className="flex h-screen">
+      <div className="ml-20 mr-4 w-full">
+        <form
+          className="search-form flex flex-col md:flex-row gap-4 mb-6 w-full max-w-lg mx-auto"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch(1);
+          }}
+        >
           <input
             type="text"
             placeholder="Recherche"
             value={partialName}
             onChange={(e) => setPartialName(e.target.value)}
             className="search-input flex-1 border p-2 rounded"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch(1);
+              }
+            }}
           />
           <select value={typeOne} onChange={(e) => setTypeOne(e.target.value)} className="search-select border p-2 rounded">
             <option value="">Type 1</option>
@@ -150,9 +163,10 @@ const PokemonSearch = () => {
             min="1"
             className="items-per-page border p-2 rounded"
           />
-          <button onClick={() => handleSearch(1)} className="search-button border p-2 rounded bg-blue-500 text-white">Search</button>
-        </div>
-        <div className="ml-20 mr-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <button type="submit" className="search-button border p-2 rounded bg-blue-500 text-white">Search</button>
+        </form>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.isArray(pokemonList) && pokemonList.map((pokemon) => (
             <div key={pokemon._id} className="relative block">
               <Link to={`/pokemon/${pokemon.name}`}>
@@ -163,14 +177,16 @@ const PokemonSearch = () => {
                   imageUrl={pokemon.imgUrl}
                 />
               </Link>
-              <div className="absolute bottom-0 left-0 flex space-x-2 p-2">
-                <button onClick={() => handleToggleSeen(pokemon._id)} className="text-lg">
-                  {seenPokemon[pokemon._id] ? '👀' : '👁️'}
-                </button>
-                <button onClick={() => handleToggleCaptured(pokemon._id)} className="text-lg">
-                  {capturedPokemon[pokemon._id] ? '📕' : '📘'}
-                </button>
-              </div>
+              {isLoggedIn && (
+                <div className="absolute bottom-0 left-0 flex space-x-2 p-2">
+                  <button onClick={() => handleToggleSeen(pokemon._id)} className="text-lg">
+                    {seenPokemon[pokemon._id] ? '👀' : '👁️'}
+                  </button>
+                  <button onClick={() => handleToggleCaptured(pokemon._id)} className="text-lg">
+                    {capturedPokemon[pokemon._id] ? '📕' : '📘'}
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -192,7 +208,7 @@ const PokemonSearch = () => {
           </button>
         </div>
       </div>
-  
+    </div>
   );
 };
 

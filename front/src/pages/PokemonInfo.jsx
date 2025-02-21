@@ -54,8 +54,8 @@ const PokemonInfo = () => {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/mark`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: urlencoded,
       });
@@ -100,6 +100,8 @@ const PokemonInfo = () => {
 
   const audio = new Audio(pokemon.soundUrl);
 
+  const isLoggedIn = !!localStorage.getItem("jwt");
+
   return (
     <div className="flex flex-col md:flex-row items-center min-h-screen" style={{ backgroundColor: color }}>
       <div className="flex flex-col items-center md:items-start p-4 md:w-1/2 mb-4 md:mb-0 h-screen">
@@ -137,7 +139,6 @@ const PokemonInfo = () => {
           </p>
         </div>
 
-
         <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
           <p className="text-gray-800 font-semibold">Taille: {pokemon.height / 10} M</p>
         </div>
@@ -145,19 +146,23 @@ const PokemonInfo = () => {
           <p className="text-gray-800 font-semibold">Poids: {pokemon.weight / 10} KG</p>
         </div>
 
-        <button
-          onClick={handleMarkAsSeen}
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-2"
-        >
-          👀 Voir le Pokémon
-        </button>
+        {isLoggedIn && (
+          <>
+            <button
+              onClick={handleMarkAsSeen}
+              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-2"
+            >
+              👀 Voir le Pokémon
+            </button>
 
-        <button
-          onClick={handleCatchPokemon}
-          className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
-        >
-          🎯 Attraper le Pokémon
-        </button>
+            <button
+              onClick={handleCatchPokemon}
+              className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
+            >
+              🎯 Attraper le Pokémon
+            </button>
+          </>
+        )}
 
         {message && <p className="text-center text-green-500 mt-4">{message}</p>}
       </div>

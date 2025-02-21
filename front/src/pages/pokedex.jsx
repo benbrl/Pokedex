@@ -31,35 +31,34 @@ const Pokedex = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex h-screen">
       <Navbar />
-      <div>
-      <h1>Pokedex</h1>
-      {pkmnCatch.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {pkmnCatch.map((pokemon) => (
-            <Link to={`/pokemon/${pokemon.name}`} key={pokemon._id} className="block">
-              <PokemonCard
-                name={pokemon.name}
-                type1={pokemon.types[0]}
-                type2={pokemon.types[1] || ""}
-                imageUrl={pokemon.imgUrl}
-              
-              />
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center min-h-screen p-8">
-          <div className="text-center space-y-4">
-            <p className="font-bold text-xl text-gray-800">Encore aucun Pokémon capturé !</p>
-            <p className="text-gray-600 text-lg shadow-sm rounded-lg p-4 hover:shadow-md transition-shadow">
-              Psst ! Va dans l'onglet Recherche pour capturer et voir des Pokémon :)
-            </p>
+      <div className="ml-20 mr-4 w-full">
+        <h1>Pokedex</h1>
+        {pkmnCatch.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {pkmnCatch.map((pokemon) => (
+              <Link to={`/pokemon/${pokemon.name}`} key={pokemon._id} className="block">
+                <PokemonCard
+                  name={pokemon.name}
+                  type1={pokemon.types[0]}
+                  type2={pokemon.types[1] || ""}
+                  imageUrl={pokemon.imgUrl}
+                />
+              </Link>
+            ))}
           </div>
-        </div>
-      )}
-    </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center min-h-screen p-8">
+            <div className="text-center space-y-4">
+              <p className="font-bold text-xl text-gray-800">Encore aucun Pokémon capturé !</p>
+              <p className="text-gray-600 text-lg rounded-lg p-4">
+                Psst ! Va dans l'onglet Recherche pour capturer et voir des Pokémon :)
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -8,9 +8,8 @@ const Dashboard = () => {
     <div className="flex h-screen">
       <Navbar />
       <div className="ms-8 flex-1 p-4">
-        <div className="">
+
           <Search/>
-        </div>
       </div>
     </div>
   );

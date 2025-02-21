@@ -17,9 +17,9 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/dashboard" element={
-          <ProtectedRoute>
+
         <Dashboard />
-          </ProtectedRoute>}
+}
         />
         <Route
           path="/pokedex"
@@ -35,7 +35,7 @@ function App() {
           </ProtectedRoute>}
         />
 
-        <Route path="/pokemon/:name" element={<ProtectedRoute><PokemonInfo /></ProtectedRoute>} />
+        <Route path="/pokemon/:name" element={<PokemonInfo />} />
 
      
 
