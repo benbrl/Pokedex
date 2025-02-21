@@ -61,32 +61,17 @@ const PokemonSearch = () => {
     setCurrentPage(page);
   };
 
-  const renderPagination = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`pagination-button border p-2 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
-        >
-          {i}
-        </button>
-      );
-    }
-    return pageNumbers;
-  };
+  const handleMarkSeen = async (pokemonId) => {
+    if (seenPokemon[pokemonId]) return; // Si déjà vu, ne rien faire
 
-  const handleToggleSeen = async (pokemonId) => {
-    const isSeen = seenPokemon[pokemonId];
-    setSeenPokemon({ ...seenPokemon, [pokemonId]: !isSeen });
-    await updatePokemonStatus(pokemonId, !isSeen, false);
+    setSeenPokemon({ ...seenPokemon, [pokemonId]: true });
+    await updatePokemonStatus(pokemonId, true, capturedPokemon[pokemonId] || false);
   };
 
   const handleToggleCaptured = async (pokemonId) => {
-    const isCaptured = capturedPokemon[pokemonId];
-    setCapturedPokemon({ ...capturedPokemon, [pokemonId]: !isCaptured });
-    await updatePokemonStatus(pokemonId, true, !isCaptured);
+    const isCaptured = !capturedPokemon[pokemonId];
+    setCapturedPokemon({ ...capturedPokemon, [pokemonId]: isCaptured });
+    await updatePokemonStatus(pokemonId, seenPokemon[pokemonId] || false, isCaptured);
   };
 
   const updatePokemonStatus = async (pokemonId, isSeen, isCaptured) => {
@@ -98,20 +83,22 @@ const PokemonSearch = () => {
 
     const urlencoded = new URLSearchParams();
     urlencoded.append("pokemonId", pokemonId);
-    urlencoded.append("isCaptured", isCaptured);
+    urlencoded.append("isSeen", isSeen.toString());
+    urlencoded.append("isCaptured", isCaptured.toString());
 
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/mark`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
           "Authorization": `Bearer ${token}`,
         },
         body: urlencoded,
       });
 
       if (!response.ok) {
-        console.error("Erreur lors de la mise à jour du statut.");
+        const errorText = await response.text();
+        console.error("Erreur lors de la mise à jour du statut:", errorText);
       }
     } catch (error) {
       console.error("Erreur lors de la requête :", error);
@@ -136,12 +123,6 @@ const PokemonSearch = () => {
             value={partialName}
             onChange={(e) => setPartialName(e.target.value)}
             className="search-input flex-1 border p-2 rounded"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSearch(1);
-              }
-            }}
           />
           <select value={typeOne} onChange={(e) => setTypeOne(e.target.value)} className="search-select border p-2 rounded">
             <option value="">Type 1</option>
@@ -155,19 +136,11 @@ const PokemonSearch = () => {
               <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
             ))}
           </select>
-          <input
-            type="number"
-            placeholder="Items per Page"
-            value={itemsPerPage}
-            onChange={(e) => setItemsPerPage(Number(e.target.value))}
-            min="1"
-            className="items-per-page border p-2 rounded"
-          />
           <button type="submit" className="search-button border p-2 rounded bg-blue-500 text-white">Search</button>
         </form>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.isArray(pokemonList) && pokemonList.map((pokemon) => (
+          {pokemonList.map((pokemon) => (
             <div key={pokemon._id} className="relative block">
               <Link to={`/pokemon/${pokemon.name}`}>
                 <PokemonCard
@@ -179,17 +152,25 @@ const PokemonSearch = () => {
               </Link>
               {isLoggedIn && (
                 <div className="absolute bottom-0 left-0 flex space-x-2 p-2">
-                  <button onClick={() => handleToggleSeen(pokemon._id)} className="text-lg">
-                    {seenPokemon[pokemon._id] ? '👀' : '👁️'}
+                  <button
+                    onClick={() => handleMarkSeen(pokemon._id)}
+                    disabled={seenPokemon[pokemon._id]}
+                    className={`text-lg ${seenPokemon[pokemon._id] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    {seenPokemon[pokemon._id] ? '✅ Vu' : '👁️ Voir'}
                   </button>
-                  <button onClick={() => handleToggleCaptured(pokemon._id)} className="text-lg">
-                    {capturedPokemon[pokemon._id] ? '📕' : '📘'}
+                  <button
+                    onClick={() => handleToggleCaptured(pokemon._id)}
+                    className="text-lg"
+                  >
+                    {capturedPokemon[pokemon._id] ? '📕 Capturé' : '📘 Attraper'}
                   </button>
                 </div>
               )}
             </div>
           ))}
         </div>
+
         <div className="mt-6 pagination flex justify-center gap-2 mb-8">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -198,7 +179,15 @@ const PokemonSearch = () => {
           >
             Précédent
           </button>
-          {renderPagination()}
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`pagination-button border p-2 rounded ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+            >
+              {i + 1}
+            </button>
+          ))}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
