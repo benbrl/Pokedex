@@ -105,7 +105,7 @@ const PokemonSearch = () => {
   }, []);
 
   const toggleCapture = async (pokemonId) => {
-    if (capturedPokemon[pokemonId]) return; // Empêche le toggle si déjà capturé
+    if (capturedPokemon[pokemonId]) return;
 
     try {
       const token = localStorage.getItem("jwt");
@@ -121,7 +121,7 @@ const PokemonSearch = () => {
 
       if (!response.ok) throw new Error(`Erreur: ${response.status}`);
 
-      // Mettre à jour l'état local des Pokémon capturés
+  
       setCapturedPokemon((prevCaptured) => ({
         ...prevCaptured,
         [pokemonId]: true,
@@ -222,7 +222,7 @@ const PokemonSearch = () => {
               <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
             ))}
           </select>
-          <button type="submit" className="search-button border p-2 rounded bg-blue-500 text-white">Search</button>
+          <button type="submit" className="search-button border p-2 rounded bg-blue-500 text-white">Rechercher</button>
         </form>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

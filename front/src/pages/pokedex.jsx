@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PokemonCard from '../components/PokemonCard';
 import '../style/font.css';
 import Navbar from '../components/Navbar';
 
 const Pokedex = () => {
   const [pkmnCatch, setPkmnCatch] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -29,6 +30,8 @@ const Pokedex = () => {
 
     fetchPokemon();
   }, []);
+
+  const isLoggedIn = !!localStorage.getItem("jwt");
 
   return (
     <div className="flex h-screen">
@@ -55,6 +58,14 @@ const Pokedex = () => {
               <p className="text-gray-600 text-lg rounded-lg p-4">
                 Psst ! Va dans l'onglet Recherche pour capturer et voir des Pokémon :)
               </p>
+              {!isLoggedIn && (
+                <button
+                  onClick={() => navigate('/login')}
+                  className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4"
+                >
+                  Se connecter pour voir les Pokémon capturés
+                </button>
+              )}
             </div>
           </div>
         )}

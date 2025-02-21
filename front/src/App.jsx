@@ -24,9 +24,9 @@ function App() {
         <Route
           path="/pokedex"
           element={
-            <ProtectedRoute>
-              <Pokedex />
-            </ProtectedRoute>
+
+            <Pokedex />
+
           }
         />
         <Route path="/profile" element={
@@ -46,6 +46,12 @@ function App() {
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>}
+        />
+
+        <Route path="/" element={
+
+          <Dashboard />
+        }
         />
       </Routes>
     </Router>

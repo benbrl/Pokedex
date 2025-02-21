@@ -85,6 +85,9 @@ const Profile = () => {
     });
   };
 
+  const totalSeen = pkmnSeen.length;
+  const totalCatch = pkmnCatch.length;
+
   return (
     <div className="flex h-screen">
       <Navbar />
@@ -119,7 +122,7 @@ const Profile = () => {
           </form>
         ) : (
           <>
-            <div className="p-6 flex flex-col items-center w-full max-w-md">
+            <div className="p-5 flex flex-col items-center w-full max-w-md">
               {trainer?.imgUrl ? (
                 <img
                   src={trainer.imgUrl}
@@ -136,9 +139,23 @@ const Profile = () => {
               <p className="text-gray-600">
                 {creationDate ? `Dresseur Pokémon depuis le ${formatDate(creationDate)}` : "Nouveau dresseur, créez votre profil !"}
               </p>
+              <div className="flex justify-center gap-4 mt-8">
+                <div className="w-48 h-48 flex items-center justify-center bg-gray-100 rounded-lg p-6">
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-gray-700">Total Pokémon vus:</p>
+                    <span className="block text-3xl font-bold text-gray-800">{totalSeen}</span>
+                  </div>
+                </div>
+                <div className="w-48 h-48 flex items-center justify-center bg-gray-100 rounded-lg p-6">
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-gray-700">Total Pokémon capturés:</p>
+                    <span className="block text-3xl font-bold text-gray-800">{totalCatch}</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="w-full ml-20 mr-4 mt-6">
+            <div className="w-full ml-22 mr-4 mt-6">
               <h2 className="text-xl font-bold text-center mb-4">Pokémons rencontrés</h2>
               {pkmnSeen.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -149,7 +166,6 @@ const Profile = () => {
                         type1={pokemon.types[0]}
                         type2={pokemon.types[1] || ""}
                         imageUrl={pokemon.imgUrl}
-                        className="max-w-xs mx-auto"
                       />
                     </Link>
                   ))}
@@ -173,7 +189,6 @@ const Profile = () => {
                         type1={pokemon.types[0]}
                         type2={pokemon.types[1] || ""}
                         imageUrl={pokemon.imgUrl}
-                        className="max-w-xs mx-auto"
                       />
                     </Link>
                   ))}

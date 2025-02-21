@@ -45,7 +45,6 @@ const PokemonInfo = () => {
         } else {
           const data = await response.json();
 
-          // Vérifier si le Pokémon est vu ou capturé
           const seenSet = new Set(data.pkmnSeen.map((pkmn) => pkmn._id));
           const capturedSet = new Set(data.pkmnCatch.map((pkmn) => pkmn._id));
 
@@ -183,7 +182,7 @@ const PokemonInfo = () => {
           <p className="text-gray-800 font-semibold">Poids: {pokemon.weight / 10} KG</p>
         </div>
 
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <>
             <button
               onClick={handleMarkAsSeen}
@@ -201,6 +200,13 @@ const PokemonInfo = () => {
               🎯 {isCaptured ? 'Capturé' : 'Attraper le Pokémon'}
             </button>
           </>
+        ) : (
+          <button
+            onClick={() => navigate('/login')}
+            className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4"
+          >
+          Connectez vous pour voir ou attraper le Pokémon
+          </button>
         )}
 
         {message && <p className="text-center text-green-500 mt-4">{message}</p>}
