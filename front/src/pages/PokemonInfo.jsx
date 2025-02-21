@@ -9,6 +9,8 @@ const PokemonInfo = () => {
   const [pokemon, setPokemon] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [isSeen, setIsSeen] = useState(false);
+  const [isCaptured, setIsCaptured] = useState(false);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -25,18 +27,51 @@ const PokemonInfo = () => {
       }
     };
 
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("jwt");
+        if (!token) throw new Error("Token introuvable, veuillez vous reconnecter.");
+
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erreur: ${response.status}`);
+        } else {
+          const data = await response.json();
+
+          // Vérifier si le Pokémon est vu ou capturé
+          const seenSet = new Set(data.pkmnSeen.map((pkmn) => pkmn._id));
+          const capturedSet = new Set(data.pkmnCatch.map((pkmn) => pkmn._id));
+
+          setIsSeen(seenSet.has(pokemon?._id));
+          setIsCaptured(capturedSet.has(pokemon?._id));
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération du profil:", error);
+      }
+    };
+
     fetchPokemon();
-  }, [name]);
+    fetchProfile();
+  }, [name, pokemon]);
 
   if (loading) return <p>Chargement...</p>;
   if (!pokemon) return <p>Pokémon introuvable.</p>;
 
   const handleMarkAsSeen = async () => {
     await updatePokemonStatus(pokemon._id, true, false);
+    setIsSeen(true);
   };
 
   const handleCatchPokemon = async () => {
     await updatePokemonStatus(pokemon._id, true, true);
+    setIsCaptured(true);
   };
 
   const updatePokemonStatus = async (pokemonId, isSeen, isCaptured) => {
@@ -45,11 +80,11 @@ const PokemonInfo = () => {
       setMessage("Vous devez être connecté pour voir ou attraper un Pokémon.");
       return;
     }
-  
+
     const data = new URLSearchParams();
     data.append("pokemonId", pokemonId);
     data.append("isCaptured", isCaptured);
-  
+
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer/mark`, {
         method: "POST",
@@ -59,7 +94,7 @@ const PokemonInfo = () => {
         },
         body: data.toString(),
       });
-  
+
       if (response.ok) {
         setMessage(isCaptured ? "Pokémon attrapé ! 🎉" : "Pokémon vu ! 👀");
       } else {
@@ -71,7 +106,7 @@ const PokemonInfo = () => {
       console.error("Erreur lors de la requête :", error);
       setMessage("Problème de connexion au serveur.");
     }
-  };  
+  };
 
   const PkmnTypeColors = {
     "normal": "#A8A878",
@@ -152,16 +187,18 @@ const PokemonInfo = () => {
           <>
             <button
               onClick={handleMarkAsSeen}
-              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-2"
+              disabled={isSeen}
+              className={`w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-2 ${isSeen ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              👀 Voir le Pokémon
+              👀 {isSeen ? 'Vu' : 'Voir le Pokémon'}
             </button>
 
             <button
               onClick={handleCatchPokemon}
-              className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
+              disabled={isCaptured}
+              className={`w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 ${isCaptured ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              🎯 Attraper le Pokémon
+              🎯 {isCaptured ? 'Capturé' : 'Attraper le Pokémon'}
             </button>
           </>
         )}
