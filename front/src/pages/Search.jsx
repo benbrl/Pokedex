@@ -30,7 +30,7 @@ const PokemonSearch = () => {
   const [typeTwo, setTypeTwo] = useState('');
   const [pokemonList, setPokemonList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(21);
   const [totalItems, setTotalItems] = useState(0);
   const [seenPokemon, setSeenPokemon] = useState({});
   const [capturedPokemon, setCapturedPokemon] = useState({});
@@ -79,7 +79,6 @@ const PokemonSearch = () => {
           setTrainer(data);
           setTrainerFormVisible(false);
 
-          // Mettre à jour les états des Pokémon vus et capturés
           const seenSet = new Set(data.pkmnSeen.map((pkmn) => pkmn._id));
           const capturedSet = new Set(data.pkmnCatch.map((pkmn) => pkmn._id));
 
@@ -195,7 +194,7 @@ const PokemonSearch = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="ml-20 mr-4 w-full">
+      <div className="ml-4 mr-4 w-full">
         <form
           className="search-form flex flex-col md:flex-row gap-4 mb-6 w-full max-w-lg mx-auto"
           onSubmit={(e) => {
