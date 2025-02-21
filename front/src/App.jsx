@@ -15,8 +15,14 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/search" element={
+          <ProtectedRoute>
+            <Search />
+          </ProtectedRoute>}
+        />
         <Route
-          path="/dashboard"
+          path="/pokedex"
           element={
             <ProtectedRoute>
               <Dashboard />
@@ -31,11 +37,7 @@ function App() {
 
         <Route path="/pokemon/:name" element={<ProtectedRoute><PokemonInfo /></ProtectedRoute>} />
 
-        <Route path="/search" element={
-          <ProtectedRoute>
-            <Search />
-          </ProtectedRoute>}
-        />
+     
 
         <Route path="/settings" element={
           <ProtectedRoute>

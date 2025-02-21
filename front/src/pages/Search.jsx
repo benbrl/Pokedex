@@ -33,6 +33,8 @@ const PokemonSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [totalItems, setTotalItems] = useState(0);
+  const [seenPokemon, setSeenPokemon] = useState({});
+  const [capturedPokemon, setCapturedPokemon] = useState({});
 
   const handleSearch = async (page = 1) => {
     try {
@@ -41,7 +43,7 @@ const PokemonSearch = () => {
 
       if (Array.isArray(data.data)) {
         setPokemonList(data.data);
-        setTotalItems(data.totalItems || 0); // Ensure totalItems is set correctly
+        setTotalItems(data.totalItems || 0);
       } else {
         console.error('Expected an array in data property but received:', data);
       }
@@ -56,8 +58,66 @@ const PokemonSearch = () => {
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  console.log('Total Items:', totalItems); // Debugging statement
-  console.log('Total Pages:', totalPages); // Debugging statement
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderPagination = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`pagination-button border p-2 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
+  const handleToggleSeen = async (pokemonId) => {
+    const isSeen = seenPokemon[pokemonId];
+    setSeenPokemon({ ...seenPokemon, [pokemonId]: !isSeen });
+    await updatePokemonStatus(pokemonId, !isSeen, false);
+  };
+
+  const handleToggleCaptured = async (pokemonId) => {
+    const isCaptured = capturedPokemon[pokemonId];
+    setCapturedPokemon({ ...capturedPokemon, [pokemonId]: !isCaptured });
+    await updatePokemonStatus(pokemonId, true, !isCaptured);
+  };
+
+  const updatePokemonStatus = async (pokemonId, isSeen, isCaptured) => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      console.error("Vous devez être connecté pour voir ou attraper un Pokémon.");
+      return;
+    }
+
+    const urlencoded = new URLSearchParams();
+    urlencoded.append("pokemonId", pokemonId);
+    urlencoded.append("isCaptured", isCaptured);
+
+    try {
+      const response = await fetch("http://localhost:3000/trainer/mark", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Bearer ${token}`,
+        },
+        body: urlencoded,
+      });
+
+      if (!response.ok) {
+        console.error("Erreur lors de la mise à jour du statut.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête :", error);
+    }
+  };
 
   return (
     <div className="flex h-screen">
@@ -66,7 +126,7 @@ const PokemonSearch = () => {
         <div className="search-form flex flex-col md:flex-row gap-4 mb-6 w-full max-w-lg mx-auto">
           <input
             type="text"
-            placeholder="Partial Name"
+            placeholder="Recherche"
             value={partialName}
             onChange={(e) => setPartialName(e.target.value)}
             className="search-input flex-1 border p-2 rounded"
@@ -93,18 +153,44 @@ const PokemonSearch = () => {
           />
           <button onClick={() => handleSearch(1)} className="search-button border p-2 rounded bg-blue-500 text-white">Search</button>
         </div>
-        <div className="p-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="ml-20 mr-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.isArray(pokemonList) && pokemonList.map((pokemon) => (
-            <Link to={`/pokemon/${pokemon.name}`} key={pokemon._id} className="block">
-              <PokemonCard
-                name={pokemon.name}
-                type1={pokemon.types[0]}
-                type2={pokemon.types[1]}
-                imageUrl={pokemon.imgUrl}
-                secondImageUrl="./pokeball2.png"
-              />
-            </Link>
+            <div key={pokemon._id} className="relative block">
+              <Link to={`/pokemon/${pokemon.name}`}>
+                <PokemonCard
+                  name={pokemon.name}
+                  type1={pokemon.types[0]}
+                  type2={pokemon.types[1]}
+                  imageUrl={pokemon.imgUrl}
+                />
+              </Link>
+              <div className="absolute bottom-0 left-0 flex space-x-2 p-2">
+                <button onClick={() => handleToggleSeen(pokemon._id)} className="text-lg">
+                  {seenPokemon[pokemon._id] ? '👀' : '👁️'}
+                </button>
+                <button onClick={() => handleToggleCaptured(pokemon._id)} className="text-lg">
+                  {capturedPokemon[pokemon._id] ? '📕' : '📘'}
+                </button>
+              </div>
+            </div>
           ))}
+        </div>
+        <div className="mt-6 pagination flex justify-center gap-2 mb-8">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="pagination-button border p-2 rounded bg-white text-blue-500 mb-8"
+          >
+            Précédent
+          </button>
+          {renderPagination()}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="pagination-button border p-2 rounded bg-white text-blue-500 mb-8"
+          >
+            Suivant
+          </button>
         </div>
       </div>
     </div>

@@ -6,8 +6,12 @@ class PokemonService {
     }
 
     async createPokemon(fields) {
-        return this.PokemonModel.create(fields);
+        return this.PokemonModel.create({
+            ...fields,
+            regions: fields.regions || [] 
+        });
     }
+    
 
     async createRegion(fields) {
         const pokemon = await this.getPokemonById(fields.pokemonId);

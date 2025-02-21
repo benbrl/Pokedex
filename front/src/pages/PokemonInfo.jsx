@@ -132,13 +132,19 @@ const PokemonInfo = () => {
         <p className="text-gray-700">{pokemon.description}</p>
 
         <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
+          <p className="text-gray-800 font-semibold">
+            Régions : {pokemon.regions.map(region => region.regionName).join(", ")}
+          </p>
+        </div>
+
+
+        <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
           <p className="text-gray-800 font-semibold">Taille: {pokemon.height / 10} M</p>
         </div>
         <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
           <p className="text-gray-800 font-semibold">Poids: {pokemon.weight / 10} KG</p>
         </div>
 
-        {/* Boutons Voir & Attraper */}
         <button
           onClick={handleMarkAsSeen}
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-2"

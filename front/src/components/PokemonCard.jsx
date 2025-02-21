@@ -61,13 +61,11 @@ const PokemonCard = ({ name, type1, type2, imageUrl, secondImageUrl }) => {
           {type2 && <span className="pokemoncard-pokemon-type">{type2}</span>}
         </div>
         <div className="right-section">
-          {secondImageUrl && (
-            <img
-              src={secondImageUrl}
-              alt={`${name} second`}
-              className="pokemon-image-second"
-            />
-          )}
+          <img
+            src="/public/pokeball2.png"
+            alt={`${name} second`}
+            className="pokemon-image-second"
+          />
           <img src={imageUrl} alt={`${name} main`} className="pokemon-image" />
         </div>
       </div>
@@ -80,12 +78,11 @@ PokemonCard.propTypes = {
   type1: PropTypes.string.isRequired,
   type2: PropTypes.string,
   imageUrl: PropTypes.string.isRequired,
-  secondImageUrl: PropTypes.string,
+
 };
 
 PokemonCard.defaultProps = {
   type2: '',
-  secondImageUrl: '',
 };
 
 export default PokemonCard;

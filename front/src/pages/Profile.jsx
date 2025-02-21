@@ -8,7 +8,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [trainerName, setTrainerName] = useState('');
   const [imgUrl, setImgUrl] = useState('');
-  const [formVisible, setFormVisible] = useState(false);
+  const [formVisible, setTrainerFormVisible] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -25,16 +25,18 @@ const Profile = () => {
 
         if (!response.ok) {
           if (response.status === 404) {
-            setFormVisible(true); // Show form if trainer not found
+            setTrainerFormVisible(true);
           } else {
             throw new Error(`Erreur: ${response.status}`);
           }
         } else {
           const data = await response.json();
           setTrainer(data);
+          setTrainerFormVisible(false);
         }
       } catch (error) {
         console.error("Erreur lors de la récupération du profil:", error);
+        setTrainerFormVisible(true);
       } finally {
         setLoading(false);
       }
@@ -43,6 +45,7 @@ const Profile = () => {
     fetchProfile();
   }, []);
 
+
   const handleCreateTrainer = async (e) => {
     e.preventDefault();
     try {
@@ -50,19 +53,16 @@ const Profile = () => {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL_APP}/trainer`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json", 
           "Authorization": `Bearer ${token}`
         },
-        body: new URLSearchParams({
-          trainerName,
-          imgUrl
-        })
+        body: JSON.stringify({ trainerName, imgUrl })
       });
 
       if (response.ok) {
         const data = await response.json();
         setTrainer(data);
-        setFormVisible(false);
+        setTrainerFormVisible(false);
       } else {
         throw new Error(`Erreur: ${response.status}`);
       }
@@ -118,13 +118,22 @@ const Profile = () => {
         ) : (
           <>
             <div className="p-6 flex flex-col items-center w-full max-w-md">
-              <img
-                src={imgUrl}
-                alt="Avatar"
-                className="w-32 h-32 rounded-full border-4 border-yellow-500 shadow-lg"
-              />
+              {imgUrl ? (
+                <img
+                  src={imgUrl}
+                  alt="Avatar"
+                  className="w-32 h-32 rounded-full border-4 border-yellow-500 shadow-lg"
+                />
+              ) : (
+                <div className="w-32 h-32 rounded-full border-4 border-yellow-500 shadow-lg flex items-center justify-center bg-gray-200">
+                  <span className="text-gray-500">Aucune Image</span>
+                </div>
+              )}
+
               <h1 className="text-2xl font-bold mt-4">{trainerName}</h1>
-              <p className="text-gray-600">Dresseur Pokémon depuis le {formatDate(creationDate)}</p>
+              <p className="text-gray-600">
+                {creationDate ? `Dresseur Pokémon depuis le ${formatDate(creationDate)}` : "Nouveau dresseur, créez votre profil !"}
+              </p>
             </div>
 
             <div className="w-full max-w-3xl mt-6">
@@ -137,14 +146,14 @@ const Profile = () => {
                       type1={pokemon.types[0]}
                       type2={pokemon.types[1] || ""}
                       imageUrl={pokemon.imgUrl}
-                      secondImageUrl="./pokeball2.png"
+                      className="max-w-xs mx-auto" // Ajout de classes pour contrôler la taille
                     />
                   </Link>
                 ))}
               </div>
 
               <h2 className="text-xl font-bold text-center mt-8 mb-4 text-black">Pokémons capturés</h2>
-              <div className="p-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {pkmnCatch.map((pokemon) => (
                   <Link to={`/pokemon/${pokemon.name}`} key={pokemon._id} className="block">
                     <PokemonCard
@@ -152,7 +161,7 @@ const Profile = () => {
                       type1={pokemon.types[0]}
                       type2={pokemon.types[1] || ""}
                       imageUrl={pokemon.imgUrl}
-                      secondImageUrl="./pokeball2.png"
+                      className="max-w-xs mx-auto"
                     />
                   </Link>
                 ))}
@@ -163,6 +172,6 @@ const Profile = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Profile;

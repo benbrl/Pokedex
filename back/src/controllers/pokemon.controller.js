@@ -4,9 +4,9 @@ const pokemonService = new PokemonService();
 
 exports.addPokemon = async (req, res) => {
     try {
-        const { name, types, imgUrl, description, soundUrl, height, weight } = req.body;
+        const { name, types, imgUrl, description, soundUrl, height, weight, regions } = req.body;
 
-        console.log(req.body)
+        console.log(req.body);
 
         if (!name || !types || !imgUrl) {
             return res.status(400).send({ message: "Tous les champs obligatoires doivent être remplis mon coco" });
@@ -17,9 +17,7 @@ exports.addPokemon = async (req, res) => {
             return res.status(400).send({ message: "Ce Pokémon existe déjà." });
         }
 
-        let pokemon = await pokemonService.createPokemon({ name, types, imgUrl, description, soundUrl, height, weight });
-
-        //Faire l'ajout de la région s'il y a un param pour
+        let pokemon = await pokemonService.createPokemon({ name, types, imgUrl, description, soundUrl, height, weight, regions });
 
         res.status(201).send({ pokemon });
 
@@ -106,17 +104,14 @@ exports.updatePokemon = async (req, res) => {
         console.log("ID reçu :", req.params.id);
         console.log("Données reçues :", req.body);
 
-        // Mise à jour du Pokémon
-        let updatedPokemon = await pokemonService.updatePokemonById(req.params.id, req.body);
+        let updateFields = { ...req.body };
 
-        // Vérification et mise à jour des régions si incluses dans la requête
         if (req.body.regions && Array.isArray(req.body.regions)) {
-            for (const region of req.body.regions) {
-                await pokemonService.updateRegion(req.params.id, region);
-            }
+            updateFields.regions = req.body.regions;
         }
 
-        // Récupération du Pokémon complet après mise à jour
+        let updatedPokemon = await pokemonService.updatePokemonById(req.params.id, updateFields);
+
         updatedPokemon = await pokemonService.getPokemonById(req.params.id);
 
         res.status(200).send({ pokemon: updatedPokemon });
@@ -126,6 +121,7 @@ exports.updatePokemon = async (req, res) => {
         res.status(400).send({ message: err.message });
     }
 };
+
 
 
 exports.deleteRegion = async (req, res) => {

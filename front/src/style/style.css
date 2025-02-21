@@ -15,7 +15,6 @@
 
 .bg-pokeball {
   background-image: url("./pokeball.png");
-  /* Remplace par le bon chemin */
   background-size: 300px 300px;
   background-repeat: repeat;
   animation: bg-scrolling 10s linear infinite;
