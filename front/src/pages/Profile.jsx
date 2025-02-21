@@ -197,7 +197,7 @@ const Profile = () => {
                 <div className="text-center mt-4">
                   <p>Oups, vous n'avez pas encore capturé de Pokémon !</p>
                   <Link to="/dashboard" className="bg-blue-500 text-white p-3 rounded mt-4 inline-block hover:bg-blue-600">
-                    Commencer à capturer vos premiers Pokémon !
+                    Commencer la chasse au Pokémon !
                   </Link>
                 </div>
               )}

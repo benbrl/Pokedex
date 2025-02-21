@@ -21,4 +21,3 @@ router.delete('/pkmn/region/:id', PokemonController.deleteRegion);
 
 module.exports = router;
 
-

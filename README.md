@@ -30,6 +30,7 @@ npm install
 
 ### 3️⃣ Configuration des fichiers `.env`
 
+
 #### 🔹 Backend
 
 Renommez le fichier **`.env.example`** en **`.env`** dans le dossier `back` :
@@ -92,6 +93,13 @@ docker-compose up -d
 ```
 
 ---
+
+## Création de la SECRET KEY
+Pour chiffrer le mot de passe, vous aurez besoin d'une clé secrète. Rendez-vous dans le fichier keygen.js et exécutez :
+```bash
+node keygen.js
+```
+Une clé sera générée et devra rester secrète. Copiez-la dans le fichier props.env.example, puis renommer le fichier props.env
 
 ## 📌 Peuplement de la base de données
 
